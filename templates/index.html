@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insight AI Web 🌐</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f4f7f6;
+            color: #333;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.0rem;
+            font-weight: 700;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .description {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .note-container h1 {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .note-container p {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+        }
+
+        .description h1 {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .description p {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+        }
+
+        form {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            max-width: 500px;
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            padding: 15px 30px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #2980b9;
+        }
+
+        #pdf-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .pdf-page {
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .loader {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .loader div {
+            display: inline-block;
+            width: 1.5rem;
+            height: 1.5rem;
+            margin: 0 0.3rem;
+            background-color: #3498db;
+            border-radius: 50%;
+            animation: wave 1.5s infinite ease-in-out;
+        }
+
+        .loader div:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .loader div:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes wave {
+            0% {
+                transform: scaleY(0.4);
+            }
+
+            50% {
+                transform: scaleY(1);
+            }
+
+            100% {
+                transform: scaleY(0.4);
+            }
+        }
+
+        .controls {
+            margin-top: 30px;
+            display: none;
+            text-align: center;
+        }
+
+        .controls button {
+            padding: 15px 30px;
+            margin: 10px;
+            font-size: 1.1rem;
+            color: #fff;
+            background-color: #2c3e50;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .controls button:hover {
+            background-color: #34495e;
+        }
+
+        @media (max-width: 768px) {
+            .description h1 {
+                font-size: 1.5rem;
+            }
+
+            .description p {
+                font-size: 1rem;
+            }
+
+            .note-container h1 {
+                font-size: 1.5rem;
+            }
+
+            .note-container p {
+                font-size: 1rem;
+            }
+
+            input[type="text"] {
+                max-width: 100%;
+            }
+
+            .controls button {
+                padding: 12px 20px;
+                font-size: 1rem;
+            }
+        }
+
+        #response-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-height: 400px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            color: #333;
+        }
+
+        .note-container {
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            font-size: 1rem;
+            color: #333;
+            text-align: center;
+        }
+
+        .footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            border-top: 1px solid #ddd;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .footer p {
+            margin: 5px 0;
+        }
+
+        .footer a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Insight AI Web 🌐</h1>
+    </header>
+    <div class="container">
+        <h2>Discover Insights from Any Web Page 🔍</h2>
+        <form method="post" action="/">
+            <input type="text" name="url" placeholder="Enter URL here 🔗" required>
+            <input type="text" name="extra_field" placeholder="Ask us anything about the website...❓" required>
+            <input type="submit" value="Transform Now 🔄">
+        </form>
+
+        <div id="pdf-container">
+            {% if pdf_path %}
+            <div class="loader">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+            <div id="response-container"></div>
+            <div class="controls">
+                <button id="play-btn">▶️</button>
+                <button id="stop-btn">⏹️</button>
+                <button id="copy-btn">📋</button>
+            </div>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const pdfContainer = document.getElementById('pdf-container');
+                    const pdfPath = "{{ url_for('static', filename=pdf_path) }}";
+                    const loader = document.querySelector('.loader');
+                    const controls = document.querySelector('.controls');
+                    const playBtn = document.getElementById('play-btn');
+                    const stopBtn = document.getElementById('stop-btn');
+                    const copyBtn = document.getElementById('copy-btn');
+                    const responseContainer = document.getElementById('response-container');
+
+                    let utterance;
+
+                    loader.style.display = 'block';
+
+                    if (pdfPath) {
+                        pdfjsLib.getDocument(pdfPath).promise.then(pdf => {
+                            const numPages = pdf.numPages;
+                            let pagePromises = [];
+
+                            for (let pageNumber = 1; pageNumber <= numPages; pageNumber++) {
+                                pagePromises.push(
+                                    pdf.getPage(pageNumber).then(page => {
+                                        const scale = 2;
+                                        const viewport = page.getViewport({ scale: scale });
+                                        const canvas = document.createElement('canvas');
+                                        canvas.className = 'pdf-page';
+                                        canvas.width = viewport.width;
+                                        canvas.height = viewport.height;
+                                        const context = canvas.getContext('2d');
+
+                                        return page.render({
+                                            canvasContext: context,
+                                            viewport: viewport
+                                        }).promise.then(() => {
+                                            const img = document.createElement('img');
+                                            img.src = canvas.toDataURL('image/png');
+                                            img.className = 'pdf-page';
+                                            return img;
+                                        });
+                                    }).catch(error => {
+                                        console.error(`Error getting or rendering page ${pageNumber}:`, error);
+                                    })
+                                );
+                            }
+
+                            Promise.all(pagePromises).then(images => {
+                                images.forEach(img => {
+                                    pdfContainer.appendChild(img);
+                                });
+
+                                const formData = new FormData();
+                                images.forEach((img, index) => {
+                                    formData.append('images', dataURLToBlob(img.src), `image_${index}.png`);
+                                });
+
+                                fetch('/process', {
+                                    method: 'POST',
+                                    body: formData
+                                }).then(response => response.json())
+                                    .then(data => {
+                                        loader.style.display = 'none';
+                                        controls.style.display = 'block';
+
+                                        if (data.html) {
+                                            responseContainer.innerHTML = data.html;
+                                            setupSpeech(data.html);
+                                        } else {
+                                            responseContainer.innerHTML = data.error;
+                                        }
+                                    }).catch(error => {
+                                        loader.style.display = 'none';
+                                        controls.style.display = 'none';
+                                        console.error('Error sending images toserver: ', error);
+                                    });
+                            }).catch(error => {
+                                loader.style.display = 'none';
+                                controls.style.display = 'none';
+                                console.error('Error processing pages:', error);
+                            });
+                        }).catch(error => {
+                            loader.style.display = 'none';
+                            controls.style.display = 'none';
+                            console.error('Error loading PDF:', error);
+                        });
+                    }
+
+                    function setupSpeech(text) {
+                        utterance = new SpeechSynthesisUtterance(text);
+                    }
+
+                    playBtn.addEventListener('click', function () {
+                        if (utterance) {
+                            window.speechSynthesis.speak(utterance);
+                        }
+                    });
+
+                    stopBtn.addEventListener('click', function () {
+                        if (window.speechSynthesis.speaking) {
+                            window.speechSynthesis.cancel();
+                        }
+                    });
+
+                    copyBtn.addEventListener('click', function () {
+                        if (responseContainer.innerText) {
+                            navigator.clipboard.writeText(responseContainer.innerText).then(() => {
+                                alert('Response copied to clipboard!');
+                            }).catch(err => {
+                                console.error('Failed to copy response:', err);
+                            });
+                        }
+                    });
+
+                    function dataURLToBlob(dataURL) {
+                        const [header, data] = dataURL.split(',');
+                        const mime = header.split(':')[1].split(';')[0];
+                        const binary = atob(data);
+                        let array = [];
+                        for (let i = 0; i < binary.length; i++) {
+                            array.push(binary.charCodeAt(i));
+                        }
+                        return new Blob([new Uint8Array(array)], { type: mime });
+                    }
+                });
+            </script>
+            {% endif %}
+        </div>
+        <div class="note-container">
+            <h1>Note 🔔</h1>
+            <p style="text-align: left;">
+                When you click <strong>Transform Now 🔄</strong>, please wait for 10 seconds ⏳. This is for security
+                purposes 🔐 as we first analyze the website you provided 🌐. Once the analysis is complete ✅, the
+                response will be loaded and displayed 📈. Thank you for your patience! 🙏
+            </p>
+        </div>
+
+        <div class="description">
+            <h1>Unlock the Power of Web Intelligence 🔓</h1>
+            <p style="text-align: left;">Discover a new way to interact with web content 🌐. With our advanced AI
+                technology 🤖, you can explore and analyze any website's information effortlessly 💡. Simply enter your
+                questions ❓, and get comprehensive insights in return 🔍. For any inquiries about the website or its
+                features, just type your query ✏️, and receive detailed answers powered by our cutting-edge AI 💬.</p>
+        </div>
+    </div>
+    <footer class="footer">
+        <p>&copy; 2024 Insight AI Web 🌐 | All rights reserved.</p>
+        <p>Contact us: <a href="mailto:support@insightaiweb.com">support@insightaiweb.com</a> 📧</p>
+    </footer>
+</body>
+
+</html>
